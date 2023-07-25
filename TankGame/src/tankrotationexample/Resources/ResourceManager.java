@@ -38,8 +38,18 @@ public class ResourceManager {
             ResourceManager.sprites.put("tank1", loadSprite("tank/tank1.png")); // load and store tank1 sprite
             ResourceManager.sprites.put("tank2", loadSprite("tank/tank2.png")); // load and store tank2 sprite
             ResourceManager.sprites.put("bullet", loadSprite("bullet/bullet.jpg")); // load and store bullet sprite
-            /*t = ImageIO.read(Objects.requireNonNull(ResourceManager.class.getClassLoader().getResource("menu/title.png"),"menu image is missing"));*/
+            ResourceManager.sprites.put("rocket1", loadSprite("bullet/rocket1.png"));
+            ResourceManager.sprites.put("rocket2", loadSprite("bullet/rocket2.png"));
+            ResourceManager.sprites.put("break", loadSprite("walls/break1.jpg"));
+            ResourceManager.sprites.put("breakdamaged", loadSprite("walls/break2.jpg"));
+            ResourceManager.sprites.put("unbreak", loadSprite("walls/unbreak.jpg"));
+            ResourceManager.sprites.put("floor", loadSprite("floor/bg.bmp"));
+            ResourceManager.sprites.put("health", loadSprite("powerups/health.png"));
+            ResourceManager.sprites.put("shield", loadSprite("powerups/shield.png"));
+            ResourceManager.sprites.put("speed", loadSprite("powerups/speed.png"));
             ResourceManager.sprites.put("menu", loadSprite("menu/title.png")); // load and store the menu image (title.png) sprite
+
+            /*t = ImageIO.read(Objects.requireNonNull(ResourceManager.class.getClassLoader().getResource("menu/title.png"),"menu image is missing"));*/
 
         } catch (IOException e) {
             // throw a RuntimeException if there's an error loading any of the sprites
@@ -67,9 +77,9 @@ public class ResourceManager {
         return ResourceManager.sprites.get(type);
     }
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         ResourceManager.initSprites();
         System.out.println();
-    }*/
+    }
 
 }
