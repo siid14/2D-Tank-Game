@@ -40,8 +40,8 @@ public class ResourceManager {
             ResourceManager.sprites.put("bullet", loadSprite("bullet/bullet.jpg")); // load and store bullet sprite
             ResourceManager.sprites.put("rocket1", loadSprite("bullet/rocket1.png"));
             ResourceManager.sprites.put("rocket2", loadSprite("bullet/rocket2.png"));
-            ResourceManager.sprites.put("break", loadSprite("walls/break1.jpg"));
-            ResourceManager.sprites.put("breakdamaged", loadSprite("walls/break2.jpg"));
+            ResourceManager.sprites.put("break1", loadSprite("walls/break1.jpg"));
+            ResourceManager.sprites.put("break2", loadSprite("walls/break2.jpg"));
             ResourceManager.sprites.put("unbreak", loadSprite("walls/unbreak.jpg"));
             ResourceManager.sprites.put("floor", loadSprite("floor/bg.bmp"));
             ResourceManager.sprites.put("health", loadSprite("powerups/health.png"));
