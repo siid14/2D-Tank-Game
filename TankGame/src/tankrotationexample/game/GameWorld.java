@@ -88,11 +88,15 @@ public class GameWorld extends JPanel implements Runnable {
          * 4 --> health
          * 5 --> speed
          * 6 --> shield
+         *  Load all resources for Tank Wars Game. Set all Game Objects to their
+         *  initial state as well.
          */
         InputStreamReader isr = new InputStreamReader(Objects.requireNonNull(ResourceManager.class.getClassLoader().getResourceAsStream("maps/map1.csv")));
+        // create the game world buffer
         try(BufferedReader mapReader = new BufferedReader(isr)){
             int row = 0;
             String[] gameItems;
+            // read the map from a CSV file and create game objects accordingly
             while(mapReader.ready()){
                 /*System.out.println((mapReader.readLine()));*/
                 gameItems = mapReader.readLine().strip().split(";");
@@ -102,6 +106,7 @@ public class GameWorld extends JPanel implements Runnable {
                     if("0".equals(gameObject)) {
                         continue;
                     }
+                    // create game object based on the code in the CSV and add it to the list
                     this.gobjs.add(GameObject.newInstance(gameObject, col*30, row*30));
                 }
                 row++;
@@ -178,11 +183,20 @@ public class GameWorld extends JPanel implements Runnable {
        /* buffer.setColor(Color.BLACK);
         buffer.fillRect(0,0, GameConstants.GAME_SCREEN_WIDTH, GameConstants.GAME_SCREEN_HEIGHT);*/
 
+        // draw the floor tiles on the game buffer
         this.drawFloor(buffer);
+
+        // draw all game objects on the buffer
         this.gobjs.forEach((gameObject -> gameObject.drawImage(buffer)));
-        this.t1.drawImage(buffer); // draw tank1 on the buffer
-        this.t2.drawImage(buffer); // draw tank2 on the buffer
+
+        // draw tank1 and tank2 on the buffer
+        this.t1.drawImage(buffer);
+        this.t2.drawImage(buffer);
+
+        // render split screens for tank1 and tank2 on the main graphics
         renderSplitScreens(g2, world);
+
+        // render the minimap on the main graphics
         renderMiniMap(g2, world);
 
 

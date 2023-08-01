@@ -41,6 +41,7 @@ public class Tank{
         bPool.fillPool(Bullet.class, 300);
     }*/
 
+    // constructor for creating a Tank object
     Tank(float x, float y, float vx, float vy, float angle, BufferedImage img) {
         this.x = x;
         this.y = y;
@@ -50,6 +51,7 @@ public class Tank{
         this.angle = angle;
     }
 
+    // getter and setter methods for x and y positions
     void setX(float x){ this.x = x; }
 
     void setY(float y) { this. y = y;}
@@ -69,6 +71,8 @@ public class Tank{
     public float getY() {
         return this.y;
     }
+
+    // methods to handle key presses for tank movement and shooting
     void toggleUpPressed() {
         this.UpPressed = true;
     }
@@ -101,7 +105,18 @@ public class Tank{
         this.LeftPressed = false;
     }
 
+    // methods to handle shooting presses and releases
+    public void toggleShootPressed() {
+        this.ShootPressed = true;
+    }
+
+    public void unToggleShootPressed() {
+        this.ShootPressed = false;
+    }
+
+    // method to update tank's position and handle shooting
     void update() {
+        // update tank's position based on the key presses
         if (this.UpPressed) {
             this.moveForwards();
         }
@@ -118,10 +133,12 @@ public class Tank{
             this.rotateRight();
         }
 
+        // handle shooting
         if(this.ShootPressed && (this.timeSinceLastShot
          + this.cooldown) < System.currentTimeMillis()) {
             this.timeSinceLastShot = System.currentTimeMillis();
 
+            // update the position of all bullets in the ammo list
             this.ammo.add(new Bullet(x,y, Resources.getSprite("bullet"), angle));
         }
 
@@ -142,6 +159,7 @@ public class Tank{
         this.angle += this.ROTATIONSPEED;
     }
 
+    // helper method to move the tank backwards
     private void moveBackwards() {
         vx =  Math.round(R * Math.cos(Math.toRadians(angle)));
         vy =  Math.round(R * Math.sin(Math.toRadians(angle)));
@@ -151,6 +169,7 @@ public class Tank{
        centerScreen();
     }
 
+    // helper method to move the tank moveFowards
     private void moveForwards() {
         vx = Math.round(R * Math.cos(Math.toRadians(angle)));
         vy = Math.round(R * Math.sin(Math.toRadians(angle)));
@@ -160,6 +179,7 @@ public class Tank{
         centerScreen();
     }
 
+    // helper method to center the screen around the tank's position
     private void centerScreen(){
         this.screen_x = this.x - GameConstants.GAME_SCREEN_WIDTH/4;
         this.screen_y = this.y - GameConstants.GAME_SCREEN_HEIGHT/2;
@@ -181,6 +201,7 @@ public class Tank{
         }
     }
 
+    // helper method to check and handle the tank crossing the game world borders
     private void checkBorder() {
         if (x < 30) {
             x = 30;
@@ -202,6 +223,7 @@ public class Tank{
     }
 
 
+    // draw the tank and its bullets on the screen
     void drawImage(Graphics g) {
         AffineTransform rotation = AffineTransform.getTranslateInstance(x, y);
         rotation.rotate(Math.toRadians(angle), this.img.getWidth() / 2.0, this.img.getHeight() / 2.0);
@@ -210,7 +232,10 @@ public class Tank{
         g2d.setColor(Color.RED);
         //g2d.rotate(Math.toRadians(angle), bounds.x + bounds.width/2, bounds.y + bounds.height/2);
         g2d.drawRect((int)x,(int)y,this.img.getWidth(), this.img.getHeight());
+
+        // draw all the bullets in the ammo list on the screen
         this.ammo.forEach(b -> b.drawImage(g2d));
+
         /*if(b != null){
             this.b.drawImage(g2d);
         }*/
@@ -226,11 +251,4 @@ public class Tank{
     }
 
 
-    public void toggleShootPressed() {
-        this.ShootPressed = true;
-    }
-
-    public void unToggleShootPressed() {
-        this.ShootPressed = false;
-    }
 }
