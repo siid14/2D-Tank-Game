@@ -1,9 +1,14 @@
 package tankrotationexample.game;
 
 import tankrotationexample.GameConstants;
+import tankrotationexample.Resources.ResourceManager;
+import tankrotationexample.Resources.ResourcePool;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -17,15 +22,22 @@ public class Tank{
     private float vx;
     private float vy;
     private float angle;
-
+    List<Bullet> ammo = new ArrayList<>();
     private float R = 5;
     private float ROTATIONSPEED = 3.0f;
-
+    static ResourcePool<Bullet> bPool;
     private BufferedImage img;
     private boolean UpPressed;
     private boolean DownPressed;
     private boolean RightPressed;
     private boolean LeftPressed;
+    private boolean ShootPressed;
+    private ResourceManager Resources;
+
+    /*static {
+        bPool = new ResourcePool<>("bullet", 300);
+        bPool.fillPool(Bullet.class, 300);
+    }*/
 
     Tank(float x, float y, float vx, float vy, float angle, BufferedImage img) {
         this.x = x;
@@ -104,6 +116,16 @@ public class Tank{
             this.rotateRight();
         }
 
+        if(this.ShootPressed){
+            this.ammo.add(new Bullet(x,y, Resources.getSprite("bullet"), angle));
+        }
+
+        this.ammo.forEach((bullet -> bullet.update()));
+        System.out.println(this.ammo.size());
+
+        /*if(b != null){
+            this.b.update();
+        }*/
 
     }
 
@@ -167,10 +189,19 @@ public class Tank{
         g2d.setColor(Color.RED);
         //g2d.rotate(Math.toRadians(angle), bounds.x + bounds.width/2, bounds.y + bounds.height/2);
         g2d.drawRect((int)x,(int)y,this.img.getWidth(), this.img.getHeight());
+        this.ammo.forEach(b -> b.drawImage(g2d));
+        /*if(b != null){
+            this.b.drawImage(g2d);
+        }*/
 
     }
 
 
+    public void toggleShootPressed() {
+        this.ShootPressed = true;
+    }
 
-
+    public void unToggleShootPressed() {
+        this.ShootPressed = false;
+    }
 }

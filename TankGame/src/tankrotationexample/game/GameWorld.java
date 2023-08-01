@@ -116,7 +116,7 @@ public class GameWorld extends JPanel implements Runnable {
         this.lf.getJf().addKeyListener(tc1);
 
         // create and initialize tank2
-        t2 = new Tank(400, 300, 0, 0, (short) 180, ResourceManager.getSprite("tank2"));
+        t2 = new Tank(200, 800, 0, 0, (short) 180, ResourceManager.getSprite("tank2"));
         TankControl tc2 = new TankControl(t2, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_NUMPAD0);
         this.lf.getJf().addKeyListener(tc2);
     }
@@ -132,11 +132,16 @@ public class GameWorld extends JPanel implements Runnable {
     }
 
     private void renderMiniMap(Graphics2D g2, BufferedImage world){
-        BufferedImage mm = world.getSubimage(0,0,GameConstants.GAME_SCREEN_WIDTH, GameConstants.GAME_SCREEN_HEIGHT);
+        BufferedImage mm = world.getSubimage(
+                0,
+                0,
+                GameConstants.GAME_SCREEN_WIDTH,
+                GameConstants.GAME_SCREEN_HEIGHT);
         g2.scale(0.2,0.2);
         g2.drawImage(mm,
                 (GameConstants.GAME_SCREEN_HEIGHT*5)/2 - (GameConstants.GAME_SCREEN_WIDTH/2),
-                (GameConstants.GAME_SCREEN_HEIGHT*5) - (GameConstants.GAME_SCREEN_HEIGHT)-190, null);
+                (GameConstants.GAME_SCREEN_HEIGHT*5) - (GameConstants.GAME_SCREEN_HEIGHT)-190,
+                null);
     }
 
     private void renderSplitScreens(Graphics2D g2, BufferedImage world){
