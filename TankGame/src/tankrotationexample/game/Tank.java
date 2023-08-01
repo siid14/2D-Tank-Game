@@ -26,6 +26,8 @@ public class Tank{
     private float R = 5;
     private float ROTATIONSPEED = 3.0f;
     static ResourcePool<Bullet> bPool;
+    long timeSinceLastShot = 0L;
+    long cooldown = 4000;
     private BufferedImage img;
     private boolean UpPressed;
     private boolean DownPressed;
@@ -116,12 +118,15 @@ public class Tank{
             this.rotateRight();
         }
 
-        if(this.ShootPressed){
+        if(this.ShootPressed && (this.timeSinceLastShot
+         + this.cooldown) < System.currentTimeMillis()) {
+            this.timeSinceLastShot = System.currentTimeMillis();
+
             this.ammo.add(new Bullet(x,y, Resources.getSprite("bullet"), angle));
         }
 
         this.ammo.forEach((bullet -> bullet.update()));
-        System.out.println(this.ammo.size());
+        /*System.out.println(this.ammo.size());*/
 
         /*if(b != null){
             this.b.update();
@@ -157,21 +162,37 @@ public class Tank{
 
     private void centerScreen(){
         this.screen_x = this.x - GameConstants.GAME_SCREEN_WIDTH/4;
-        this.screen_y = this.y - GameConstants.GAME_SCREEN_WIDTH/4;
+        this.screen_y = this.y - GameConstants.GAME_SCREEN_HEIGHT/2;
+
+        if (screen_x < 0) {
+            screen_x = 0;
+        }
+
+        if (screen_y < 0) {
+            screen_y = 0;
+        }
+
+        if (screen_x > (GameConstants.GAME_WORLD_WIDTH - GameConstants.GAME_SCREEN_WIDTH/2)) {
+            screen_x = GameConstants.GAME_WORLD_WIDTH - GameConstants.GAME_SCREEN_WIDTH/2;
+        }
+
+        if (screen_y > (GameConstants.GAME_WORLD_HEIGHT - GameConstants.GAME_SCREEN_HEIGHT)) {
+            screen_y = GameConstants.GAME_WORLD_HEIGHT - GameConstants.GAME_SCREEN_HEIGHT;
+        }
     }
 
     private void checkBorder() {
         if (x < 30) {
             x = 30;
         }
-        if (x >= GameConstants.GAME_SCREEN_WIDTH - 88) {
-            x = GameConstants.GAME_SCREEN_WIDTH - 88;
+        if (x >= GameConstants.GAME_WORLD_WIDTH - 88) {
+            x = GameConstants.GAME_WORLD_WIDTH - 88;
         }
         if (y < 40) {
             y = 40;
         }
-        if (y >= GameConstants.GAME_SCREEN_HEIGHT - 80) {
-            y = GameConstants.GAME_SCREEN_HEIGHT - 80;
+        if (y >= GameConstants.GAME_WORLD_HEIGHT - 80) {
+            y = GameConstants.GAME_WORLD_HEIGHT - 80;
         }
     }
 
@@ -193,6 +214,14 @@ public class Tank{
         /*if(b != null){
             this.b.drawImage(g2d);
         }*/
+        g2d.setColor(Color.GREEN);
+        g2d.drawRect((int)x, (int)y-20, 100,15);
+
+        long currentWidth = 100 - ((this.timeSinceLastShot + this.cooldown) - System.currentTimeMillis())/40;
+        if(currentWidth > 100){
+            currentWidth = 100;
+        }
+        g2d.fillRect((int)x, (int)y-20, (int)currentWidth,15);
 
     }
 

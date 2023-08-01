@@ -76,8 +76,8 @@ public class GameWorld extends JPanel implements Runnable {
      * initial state as well.
      */
     public void InitializeGame() {
-        this.world = new BufferedImage(GameConstants.GAME_SCREEN_WIDTH,
-                GameConstants.GAME_SCREEN_HEIGHT,
+        this.world = new BufferedImage(GameConstants.GAME_WORLD_WIDTH,
+                GameConstants.GAME_WORLD_HEIGHT,
                 BufferedImage.TYPE_INT_RGB);
 
         /**
@@ -121,7 +121,7 @@ public class GameWorld extends JPanel implements Runnable {
         this.lf.getJf().addKeyListener(tc2);
     }
 
-
+    // * to draw the floor tiles on the game buffer
     private void drawFloor(Graphics2D buffer){
         BufferedImage floor = Resources.getSprite("floor");
         for(int i = 0; i< GameConstants.GAME_SCREEN_WIDTH; i+=320){
@@ -131,37 +131,45 @@ public class GameWorld extends JPanel implements Runnable {
         }
     }
 
+    // * to render the minimap
     private void renderMiniMap(Graphics2D g2, BufferedImage world){
         BufferedImage mm = world.getSubimage(
                 0,
                 0,
                 GameConstants.GAME_SCREEN_WIDTH,
                 GameConstants.GAME_SCREEN_HEIGHT);
+
         g2.scale(0.2,0.2);
         g2.drawImage(mm,
-                (GameConstants.GAME_SCREEN_HEIGHT*5)/2 - (GameConstants.GAME_SCREEN_WIDTH/2),
-                (GameConstants.GAME_SCREEN_HEIGHT*5) - (GameConstants.GAME_SCREEN_HEIGHT)-190,
+                (GameConstants.GAME_SCREEN_HEIGHT*5)/2 - (GameConstants.GAME_WORLD_WIDTH/2),
+                (GameConstants.GAME_SCREEN_HEIGHT*5) - (GameConstants.GAME_WORLD_HEIGHT)-190,
                 null);
     }
 
+
     private void renderSplitScreens(Graphics2D g2, BufferedImage world){
+        // get the left-half split screen image for tank1
         BufferedImage lh = world.getSubimage(
-                (int) this.t1.getScreen_x(),
-                (int) this.t1.getScreen_y(),
-                GameConstants.GAME_SCREEN_WIDTH/2,
-                GameConstants.GAME_SCREEN_HEIGHT);
+                (int) this.t1.getScreen_x(), // x-coordinate of the top-left corner of the left split screen
+                (int) this.t1.getScreen_y(), // y-coordinate of the top-left corner of the left split screen
+                GameConstants.GAME_SCREEN_WIDTH/2, // width of the left split screen (half of the game screen width)
+                GameConstants.GAME_SCREEN_HEIGHT); // height of the left split screen (full game screen height)
+
+        // get the right-half split screen image for tank2
         BufferedImage rh = world.getSubimage(
                 (int) this.t2.getScreen_x(),
                 (int) this.t2.getScreen_y(),
                 GameConstants.GAME_SCREEN_WIDTH/2,
                 GameConstants.GAME_SCREEN_HEIGHT);
+
         /*g2.drawImage(world, 0, 0, null); // draw the buffer onto the main graphics*/
 
-
+        // draw the left and right split screens onto the main graphics
         g2.drawImage(lh, 0, 0, null);
         g2.drawImage(rh, GameConstants.GAME_SCREEN_WIDTH/2+4, 0, null);
     }
 
+    // * paint the game components on the screen
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
@@ -169,7 +177,6 @@ public class GameWorld extends JPanel implements Runnable {
 
        /* buffer.setColor(Color.BLACK);
         buffer.fillRect(0,0, GameConstants.GAME_SCREEN_WIDTH, GameConstants.GAME_SCREEN_HEIGHT);*/
-
 
         this.drawFloor(buffer);
         this.gobjs.forEach((gameObject -> gameObject.drawImage(buffer)));
