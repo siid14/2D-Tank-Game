@@ -9,9 +9,11 @@ import java.awt.image.BufferedImage;
 public class Bullet extends GameObject {
     private float x,y;
     private float vx, vy;
+    private float charge = 1f;
     private float angle;
     private float R = 5;
     private BufferedImage img;
+    private Rectangle hitbox;
 
     // constructor for creating a Bullet object
     public Bullet(float x, float y, BufferedImage img, float angle) {
@@ -21,6 +23,7 @@ public class Bullet extends GameObject {
         this.vx = 0;
         this.vy = 0;
         this.angle = angle;
+        this.hitbox = new Rectangle((int)x,(int)y,this.img.getWidth(),this.img.getHeight());
     }
 
     // getter methods for x and y positions
@@ -44,6 +47,8 @@ public class Bullet extends GameObject {
 
         // check and handle the bullet crossing the game screen borders
         checkBorder();
+
+        this.hitbox.setLocation((int)x, (int)y);
     }
 
     // check and handle the bullet crossing the game screen borders
@@ -62,6 +67,10 @@ public class Bullet extends GameObject {
         }
     }
 
+    public void increaseCharge() {
+        this.charge = this.charge + 0.05f;
+    }
+
     /*public void drawImage(Graphics buffer) {
         buffer.drawImage(this.img, (int)x, (int)y, null);
     }*/
@@ -70,9 +79,21 @@ public class Bullet extends GameObject {
    public void drawImage(Graphics g) {
         AffineTransform rotation = AffineTransform.getTranslateInstance(x, y);
         rotation.rotate(Math.toRadians(angle), this.img.getWidth() / 2.0, this.img.getHeight() / 2.0);
-        rotation.scale(5,5); // scale the bullet to make it larger
+        rotation.scale(this.charge,this.charge); // scale the bullet to make it larger
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(this.img, rotation, null);
+    }
+
+    @Override
+    public Rectangle getHitBox() {
+        return this.hitbox.getBounds();
+    }
+
+
+    public void setHeading(float x, float y, float angle) {
+       this.x = x;
+       this.y = y;
+       this.angle = angle;
     }
 }

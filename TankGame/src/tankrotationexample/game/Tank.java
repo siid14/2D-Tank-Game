@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author anthony-pc
  */
-public class Tank{
+public class Tank extends GameObject {
 
     private float x;
     private float y;
@@ -27,7 +27,8 @@ public class Tank{
     private float ROTATIONSPEED = 3.0f;
     static ResourcePool<Bullet> bPool;
     long timeSinceLastShot = 0L;
-    long cooldown = 4000;
+    long cooldown = 1000;
+    Bullet currentChargeBullet = null;
     private BufferedImage img;
     private boolean UpPressed;
     private boolean DownPressed;
@@ -35,6 +36,7 @@ public class Tank{
     private boolean LeftPressed;
     private boolean ShootPressed;
     private ResourceManager Resources;
+    private Rectangle hitbox;
 
     /*static {
         bPool = new ResourcePool<>("bullet", 300);
@@ -49,6 +51,12 @@ public class Tank{
         this.vy = vy;
         this.img = img;
         this.angle = angle;
+        this.hitbox = new Rectangle((int)x,(int)y,this.img.getWidth(),this.img.getHeight());
+    }
+
+    @Override
+    public Rectangle getHitBox() {
+        return this.hitbox.getBounds();
     }
 
     // getter and setter methods for x and y positions
@@ -136,13 +144,31 @@ public class Tank{
         // handle shooting
         if(this.ShootPressed && (this.timeSinceLastShot
          + this.cooldown) < System.currentTimeMillis()) {
-            this.timeSinceLastShot = System.currentTimeMillis();
 
-            // update the position of all bullets in the ammo list
-            this.ammo.add(new Bullet(x,y, Resources.getSprite("bullet"), angle));
+
+            // if the current charge bullet is null
+            // create a new charge bullet at the tank's position and set its heading.
+            if(this.currentChargeBullet == null){
+                this.currentChargeBullet = (new Bullet(this.x, this.y, Resources.getSprite("bullet"), angle));
+            } else {
+                // if the current charge bullet already exists, increase its charge and update its heading.
+                this.currentChargeBullet.increaseCharge();
+                this.currentChargeBullet.setHeading(x,y,angle);
+            }
+
+
+        } else {
+            if(this.currentChargeBullet != null){
+                // add the newly created bullet to the ammo list.
+                this.ammo.add(new Bullet(x,y, Resources.getSprite("bullet"), angle));
+                this.timeSinceLastShot = System.currentTimeMillis();
+                this.currentChargeBullet = null;
+            }
         }
 
+        // update the positions of all bullets in the ammo list.
         this.ammo.forEach((bullet -> bullet.update()));
+        this.hitbox.setLocation((int)x, (int)y);
         /*System.out.println(this.ammo.size());*/
 
         /*if(b != null){
@@ -224,7 +250,7 @@ public class Tank{
 
 
     // draw the tank and its bullets on the screen
-    void drawImage(Graphics g) {
+    public void drawImage(Graphics g) {
         AffineTransform rotation = AffineTransform.getTranslateInstance(x, y);
         rotation.rotate(Math.toRadians(angle), this.img.getWidth() / 2.0, this.img.getHeight() / 2.0);
         Graphics2D g2d = (Graphics2D) g;
@@ -236,19 +262,32 @@ public class Tank{
         // draw all the bullets in the ammo list on the screen
         this.ammo.forEach(b -> b.drawImage(g2d));
 
+        if(this.currentChargeBullet != null){
+            this.currentChargeBullet.drawImage(g2d);
+        }
+
         /*if(b != null){
             this.b.drawImage(g2d);
         }*/
         g2d.setColor(Color.GREEN);
         g2d.drawRect((int)x, (int)y-20, 100,15);
 
-        long currentWidth = 100 - ((this.timeSinceLastShot + this.cooldown) - System.currentTimeMillis())/40;
+        long currentWidth = 100 - ((this.timeSinceLastShot + this.cooldown) - System.currentTimeMillis())/10;
         if(currentWidth > 100){
             currentWidth = 100;
         }
         g2d.fillRect((int)x, (int)y-20, (int)currentWidth,15);
-
     }
+    
+    public void collides(GameObject with){
+        if(with instanceof Bullet){
+            //lose life
+        } else if (with instanceof Wall) {
+            //stop
+        }  else if (with instanceof PowerUp) {
+            ((PowerUp)with).applyPowerUp(this);
+    }
+}
 
 
 }

@@ -5,7 +5,6 @@ import tankrotationexample.GameConstants;
 import tankrotationexample.Launcher;
 import tankrotationexample.Resources.ResourceManager;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -13,7 +12,6 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +27,7 @@ public class GameWorld extends JPanel implements Runnable {
     private Wall wall;
     private final Launcher lf;
     private long tick = 0;
-    List<GameObject> gobjs = new ArrayList<>(800);
+    List<GameObject> gameObjects = new ArrayList<>(800);
     private ResourceManager Resources;
 
 
@@ -50,6 +48,7 @@ public class GameWorld extends JPanel implements Runnable {
                 this.tick++;
                 this.t1.update(); // update tank1's position and state.
                 this.t2.update(); // update tank2's position and state.
+                this.checkCollision();
                 this.repaint();   // redraw game
                 /*
                  * Sleep for 1000/144 ms (~6.9ms). This is done to have our
@@ -59,6 +58,27 @@ public class GameWorld extends JPanel implements Runnable {
             }
         } catch (InterruptedException ignored) {
             System.out.println(ignored);
+        }
+    }
+
+    private void checkCollision() {
+        for(int i = 0; i < this.gameObjects.size(); i++){
+            GameObject obj1 = this.gameObjects.get(i);
+            if(obj1 instanceof Wall || obj1 instanceof Health || obj1 instanceof Speed || obj1 instanceof Shield){
+                continue;
+            }
+            for(int j = 0; j < this.gameObjects.size(); j++){
+                if(i==j) continue;
+                GameObject obj2 = this.gameObjects.get(j);
+                if(obj2 instanceof Tank){
+                    continue;
+                }
+                if(obj1.getHitBox().intersects(obj2.getHitBox())){
+                    obj1.collides(obj2);
+                    System.out.println(obj1 + " has hit " + obj2);
+
+                }
+            }
         }
     }
 
@@ -107,7 +127,7 @@ public class GameWorld extends JPanel implements Runnable {
                         continue;
                     }
                     // create game object based on the code in the CSV and add it to the list
-                    this.gobjs.add(GameObject.newInstance(gameObject, col*30, row*30));
+                    this.gameObjects.add(GameObject.newInstance(gameObject, col*30, row*30));
                 }
                 row++;
             }
@@ -124,6 +144,10 @@ public class GameWorld extends JPanel implements Runnable {
         t2 = new Tank(200, 800, 0, 0, (short) 180, ResourceManager.getSprite("tank2"));
         TankControl tc2 = new TankControl(t2, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_NUMPAD0);
         this.lf.getJf().addKeyListener(tc2);
+
+        this.gameObjects.add(t1);
+
+        this.gameObjects.add(t2);
     }
 
     // * to draw the floor tiles on the game buffer
@@ -187,7 +211,7 @@ public class GameWorld extends JPanel implements Runnable {
         this.drawFloor(buffer);
 
         // draw all game objects on the buffer
-        this.gobjs.forEach((gameObject -> gameObject.drawImage(buffer)));
+        this.gameObjects.forEach((gameObject -> gameObject.drawImage(buffer)));
 
         // draw tank1 and tank2 on the buffer
         this.t1.drawImage(buffer);

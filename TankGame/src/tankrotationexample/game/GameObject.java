@@ -1,12 +1,13 @@
 package tankrotationexample.game;
 
+import jdk.jfr.consumer.RecordedStackTrace;
 import tankrotationexample.Resources.ResourceManager;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
-public class GameObject {
+public abstract class GameObject {
 
     public static GameObject newInstance(String type, float x, float y) throws UnsupportedOperationException {
         /*System.out.println("type : " + type);*/
@@ -22,7 +23,11 @@ public class GameObject {
         };
     }
 
-    public void drawImage(Graphics g) {}
+    public void drawImage(Graphics g) {};
 
+    public abstract Rectangle getHitBox();
+
+
+    public abstract void collides(GameObject obj2);
 
 }
