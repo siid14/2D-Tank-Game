@@ -14,8 +14,13 @@ import java.util.List;
  *
  * @author anthony-pc
  */
+
+/**
+ * Represents a tank object in the game.
+ */
 public class Tank extends GameObject {
 
+    // tank properties
     private float x;
     private float y;
     private float screen_x,screen_y;
@@ -54,6 +59,7 @@ public class Tank extends GameObject {
         this.hitbox = new Rectangle((int)x,(int)y,this.img.getWidth(),this.img.getHeight());
     }
 
+    // getter for the tank's hitbox
     @Override
     public Rectangle getHitBox() {
         return this.hitbox.getBounds();
@@ -145,7 +151,6 @@ public class Tank extends GameObject {
         if(this.ShootPressed && (this.timeSinceLastShot
          + this.cooldown) < System.currentTimeMillis()) {
 
-
             // if the current charge bullet is null
             // create a new charge bullet at the tank's position and set its heading.
             if(this.currentChargeBullet == null){
@@ -156,25 +161,27 @@ public class Tank extends GameObject {
                 this.currentChargeBullet.setHeading(x,y,angle);
             }
 
-
-        } else {
-            if(this.currentChargeBullet != null){
-                // add the newly created bullet to the ammo list.
-                this.timeSinceLastShot = System.currentTimeMillis();
-                var bullet = new Bullet(x,y, Resources.getSprite("bullet"), angle);
-                this.ammo.add(bullet);
-                this.currentChargeBullet = null;
-                gw.anims.add(new Animation(350, 300, ResourceManager.getAnimation("bulletshoot")));
-                /*ResourceManager.getSound("shotfire").playSound();*/
+            } else {
+                if(this.currentChargeBullet != null){
+                    // add the newly created bullet to the ammo list.
+                    this.timeSinceLastShot = System.currentTimeMillis();
+                    var bullet = new Bullet(x,y, Resources.getSprite("bullet"), angle);
+                    this.ammo.add(bullet);
+                    this.currentChargeBullet = null;
+                    /*gw.anims.add(new Animation(350, 300, ResourceManager.getAnimation("bulletshoot")));*/
+                    /*ResourceManager.getSound("shotfire").playSound();*/
+                }
             }
-        }
 
         // update the positions of all bullets in the ammo list.
         this.ammo.forEach((bullet -> bullet.update()));
 
+        // center the screen around the tank's position
         centerScreen();
+
+        // update the hitbox position based on the tank's position
         this.hitbox.setLocation((int)x, (int)y);
-        /*System.out.println(this.ammo.size());*/
+         /*System.out.println(this.ammo.size());*/
 
         /*if(b != null){
             this.b.update();
@@ -182,15 +189,17 @@ public class Tank extends GameObject {
 
     }
 
+    // rotate the tank to the left
     private void rotateLeft() {
         this.angle -= this.ROTATIONSPEED;
     }
 
+    // rotate the tank to the right
     private void rotateRight() {
         this.angle += this.ROTATIONSPEED;
     }
 
-    // helper method to move the tank backwards
+    // move the tank backwards
     private void moveBackwards() {
         vx =  Math.round(R * Math.cos(Math.toRadians(angle)));
         vy =  Math.round(R * Math.sin(Math.toRadians(angle)));
@@ -200,7 +209,7 @@ public class Tank extends GameObject {
        centerScreen();
     }
 
-    // helper method to move the tank moveFowards
+    // move the tank forwards
     private void moveForwards() {
         vx = Math.round(R * Math.cos(Math.toRadians(angle)));
         vy = Math.round(R * Math.sin(Math.toRadians(angle)));
@@ -210,11 +219,13 @@ public class Tank extends GameObject {
         centerScreen();
     }
 
-    // helper method to center the screen around the tank's position
+    // center the screen around the tank's position
     private void centerScreen(){
+        // calculate the screen coordinates for the tank's position
         this.screen_x = this.x - GameConstants.GAME_SCREEN_WIDTH/4;
         this.screen_y = this.y - GameConstants.GAME_SCREEN_HEIGHT/2;
 
+        // ensure the screen doesn't go beyond the game world boundaries
         if (screen_x < 0) {
             screen_x = 0;
         }
@@ -232,7 +243,7 @@ public class Tank extends GameObject {
         }
     }
 
-    // helper method to check and handle the tank crossing the game world borders
+    // check and handle the tank crossing the game world borders
     private void checkBorder() {
         if (x < 30) {
             x = 30;
@@ -256,6 +267,7 @@ public class Tank extends GameObject {
 
     // draw the tank and its bullets on the screen
     public void drawImage(Graphics g) {
+        // apply rotation transformation to the tank's image
         AffineTransform rotation = AffineTransform.getTranslateInstance(x, y);
         rotation.rotate(Math.toRadians(angle), this.img.getWidth() / 2.0, this.img.getHeight() / 2.0);
         Graphics2D g2d = (Graphics2D) g;
@@ -267,6 +279,7 @@ public class Tank extends GameObject {
         // draw all the bullets in the ammo list on the screen
         this.ammo.forEach(b -> b.drawImage(g2d));
 
+        // draw the current charge bullet (if any)
         if(this.currentChargeBullet != null){
             this.currentChargeBullet.drawImage(g2d);
         }
@@ -274,6 +287,7 @@ public class Tank extends GameObject {
         /*if(b != null){
             this.b.drawImage(g2d);
         }*/
+
         g2d.setColor(Color.GREEN);
         g2d.drawRect((int)x, (int)y-20, 100,15);
 

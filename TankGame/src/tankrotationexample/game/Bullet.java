@@ -17,8 +17,8 @@ public class Bullet extends GameObject {
 
     // constructor for creating a Bullet object
     public Bullet(float x, float y, BufferedImage img, float angle) {
-        this.x = x;
-        this.y = y;
+        this.x = x + 55;
+        this.y = y + 20;
         this.img = img;
         this.vx = 0;
         this.vy = 0;
@@ -42,8 +42,8 @@ public class Bullet extends GameObject {
         vy =  Math.round(R * Math.sin(Math.toRadians(angle)));
 
         // update the bullet's position
-        x -= vx;
-        y -= vy;
+        x += vx;
+        y += vy;
 
         // check and handle the bullet crossing the game screen borders
         checkBorder();
@@ -67,6 +67,7 @@ public class Bullet extends GameObject {
         }
     }
 
+    // increase the bullet's charge
     public void increaseCharge() {
         this.charge = this.charge + 0.05f;
     }
@@ -95,10 +96,10 @@ public class Bullet extends GameObject {
 
     }
 
-
+    // set the bullet's heading (position and angle)
     public void setHeading(float x, float y, float angle) {
-       this.x = x;
-       this.y = y;
+       this.x = x + 55;
+       this.y = y + 20;
        this.angle = angle;
     }
 }
