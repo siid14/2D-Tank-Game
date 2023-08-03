@@ -277,7 +277,7 @@ public class Tank extends GameObject {
         g2d.drawRect((int)x,(int)y,this.img.getWidth(), this.img.getHeight());
 
         // draw all the bullets in the ammo list on the screen
-        this.ammo.forEach(b -> b.drawImage(g2d));
+        this.ammo.  forEach(b -> b.drawImage(g2d));
 
         // draw the current charge bullet (if any)
         if(this.currentChargeBullet != null){

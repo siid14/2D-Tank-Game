@@ -197,17 +197,26 @@ public class GameWorld extends JPanel implements Runnable {
 
     // * to render the minimap
     private void renderMiniMap(Graphics2D g2, BufferedImage world){
-        BufferedImage mm = world.getSubimage(
+        // create a sub-image from the 'world' image, representing the entire game world
+        BufferedImage minimap = world.getSubimage(
                 0,
                 0,
-                GameConstants.GAME_SCREEN_WIDTH,
-                GameConstants.GAME_SCREEN_HEIGHT);
+                GameConstants.GAME_WORLD_WIDTH,
+                GameConstants.GAME_WORLD_HEIGHT);
 
+        // scale the Graphics2D object 'g2' by a factor of 0.2 in both x and y directions
+        // this is done to reduce the size of the minimap to 20% of its original size
         g2.scale(0.2,0.2);
-        g2.drawImage(mm,
-                (GameConstants.GAME_SCREEN_HEIGHT*5)/2 - (GameConstants.GAME_WORLD_WIDTH/2),
-                (GameConstants.GAME_SCREEN_HEIGHT*5) - (GameConstants.GAME_WORLD_HEIGHT)-190,
-                null);
+
+        // calculate the x-coordinate for drawing the minimap at the center of the screen horizontally
+        int minimapX = (GameConstants.GAME_SCREEN_HEIGHT * 5) / 2 - (GameConstants.GAME_WORLD_WIDTH / 11);
+
+        // calculate the y-coordinate for drawing the minimap at the bottom of the screen
+        // the minimap is adjusted 250 units above the bottom of the screen
+        int minimapY = (GameConstants.GAME_SCREEN_HEIGHT * 5) - (GameConstants.GAME_WORLD_HEIGHT) - 250;
+
+        // draw the minimap on the Graphics2D object 'g2' at the calculated position (minimapX, minimapY)
+        g2.drawImage(minimap, minimapX, minimapY, null);
     }
 
 
