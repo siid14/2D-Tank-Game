@@ -7,6 +7,7 @@ public class Health extends GameObject {
     float x,y;
     BufferedImage img;
     private Rectangle hitbox;
+    boolean hasCollided = false;
 
     public Health(float x, float y, BufferedImage img) {
         this.x = x;
@@ -26,6 +27,9 @@ public class Health extends GameObject {
     }
 
     public void drawImage(Graphics buffer) {
-        buffer.drawImage(this.img, (int)x, (int)y, null);
+        if(!this.hasCollided) {
+            buffer.drawImage(this.img, (int)x, (int)y, null);
+        }
+
     }
 }

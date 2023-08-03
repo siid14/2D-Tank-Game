@@ -1,19 +1,19 @@
 package tankrotationexample.Resources;
 
-import tankrotationexample.game.Bullet;
+import tankrotationexample.game.Sound;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.Clip;
+import javax.sound.sampled.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.sql.SQLOutput;
+import java.time.format.ResolverStyle;
 import java.util.*;
 
 public class ResourceManager {
 
     // maps to store loaded sprites, sounds, and animations
     private final static Map<String, BufferedImage> sprites = new HashMap<>();
-    private final static Map<String, Clip> sounds = new HashMap<>();
+    private final static Map<String, Sound> sounds = new HashMap<>();
     private final static Map<String, List<BufferedImage>> animations = new HashMap<>();
 
     // map to store animation information (frame count) for each animation
@@ -42,6 +42,20 @@ public class ResourceManager {
                         .class
                         .getClassLoader()
                         .getResource(path)));
+    }
+
+    private static Sound loadSound(String path) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        // get the resource from class loader from a path
+        AudioInputStream ais = AudioSystem.getAudioInputStream(
+                Objects.requireNonNull(
+                        ResourceManager.class.getClassLoader().getResource(path)
+                        )
+                );
+        Clip c = AudioSystem.getClip(); // make new clip
+        c.open(ais); // open the clip
+        Sound s = new Sound(c); // get that clip into Sound object
+        s.setVolume(.2f);
+        return s;
     }
 
     /**
@@ -92,6 +106,14 @@ public class ResourceManager {
         }
         return ResourceManager.animations.get(type);
     }
+
+    public static Sound getSound(String type){
+        if(!ResourceManager.sounds.containsKey(type)){
+            throw new RuntimeException("%s is missing from sounds resources".formatted(type));
+        }
+        return ResourceManager.sounds.get(type);
+    }
+
     // * load animation frames
     private static void initAnimations(){
         String baseName = "animations/%s/%s_%04d.png";
@@ -118,12 +140,27 @@ public class ResourceManager {
         });
 
     }
+
+    public static void initSounds(){
+        try {
+            ResourceManager.sounds.put("bullet_shoot", loadSound("sounds/bullet_shoot.wav"));
+            ResourceManager.sounds.put("explosion", loadSound("sounds/explosion.wav"));
+            ResourceManager.sounds.put("background", loadSound("sounds/Music.mid"));
+            ResourceManager.sounds.put("pickup", loadSound("sounds/pickup.wav"));
+            ResourceManager.sounds.put("shotfire", loadSound("sounds/shotfiring.wav"));
+        } catch(Exception e){
+            System.out.println("initSounds() e : " + e);
+        }
+
+    }
+
     /**
      * Load all necessary game resources.
      */
     public static void loadResources(){
         ResourceManager.initSprites();
         ResourceManager.initAnimations();
+        ResourceManager.initSounds();
     }
 
 
@@ -135,7 +172,26 @@ public class ResourceManager {
         /*ResourceManager.initSprites();*/
         /*ResourceManager.initAnimations();*/
         ResourceManager.loadResources();
-        System.out.println();
+        Sound background = ResourceManager.getSound("background");
+        /*background.setLooping();
+        background.playSound();*/
+        while (true){
+            /*System.out.println();*/
+
+            try{
+                ResourceManager.getSound("explosion").playSound();
+
+                Thread.sleep(1500);
+                ResourceManager.getSound("bullet_shoot").playSound();
+                Thread.sleep(1500);
+                ResourceManager.getSound("pickup").playSound();
+                Thread.sleep(1500);
+                ResourceManager.getSound("shotfire").playSound();
+             } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
     }
 
 }

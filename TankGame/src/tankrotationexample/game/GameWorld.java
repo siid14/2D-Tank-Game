@@ -30,6 +30,7 @@ public class GameWorld extends JPanel implements Runnable {
     List<GameObject> gameObjects = new ArrayList<>(800);
     private ResourceManager Resources;
     List<Animation> anims = new ArrayList<>();
+    Sound background = ResourceManager.getSound("background");
 
 
     /**
@@ -46,12 +47,17 @@ public class GameWorld extends JPanel implements Runnable {
     public void run() {
         try {
 
+            // play background music when the game run
+            /*background.setLooping();
+            background.playSound();*/
+
             while (true) {
                 this.tick++;
                 this.t1.update(this); // update tank1's position and state.
                 this.t2.update(this); // update tank2's position and state.
                 this.anims.forEach(animation -> animation.update());
                 this.checkCollision();
+                /*this.gameObjects.removeIf(gameObject -> gameObject.hasCollided());*/
                 this.repaint();   // redraw game
                 /*
                  * Sleep for 1000/144 ms (~6.9ms). This is done to have our
@@ -78,7 +84,11 @@ public class GameWorld extends JPanel implements Runnable {
                 }
                 if(obj1.getHitBox().intersects(obj2.getHitBox())){
                     obj1.collides(obj2);
-                    System.out.println(obj1 + " has hit " + obj2);
+                    System.out.println("Collision detected: " +obj1 + " has hit " + obj2);
+                    if(obj1 instanceof Tank && obj2 instanceof Health){
+                        System.out.println("Tank has hit health");
+                        ResourceManager.getSound("pickup").playSound();
+                    }
 
                 }
             }

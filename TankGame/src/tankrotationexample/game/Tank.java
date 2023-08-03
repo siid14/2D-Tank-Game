@@ -165,6 +165,7 @@ public class Tank extends GameObject {
                 this.ammo.add(bullet);
                 this.currentChargeBullet = null;
                 gw.anims.add(new Animation(350, 300, ResourceManager.getAnimation("bulletshoot")));
+                /*ResourceManager.getSound("shotfire").playSound();*/
             }
         }
 
