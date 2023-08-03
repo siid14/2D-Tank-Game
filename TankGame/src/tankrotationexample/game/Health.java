@@ -20,6 +20,11 @@ public class Health extends GameObject {
         return this.hitbox.getBounds();
     }
 
+    @Override
+    public void collides(GameObject obj2) {
+
+    }
+
     public void drawImage(Graphics buffer) {
         buffer.drawImage(this.img, (int)x, (int)y, null);
     }

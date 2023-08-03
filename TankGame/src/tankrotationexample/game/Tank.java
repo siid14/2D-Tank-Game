@@ -123,7 +123,7 @@ public class Tank extends GameObject {
     }
 
     // method to update tank's position and handle shooting
-    void update() {
+    void update(GameWorld gw) {
         // update tank's position based on the key presses
         if (this.UpPressed) {
             this.moveForwards();
@@ -160,14 +160,18 @@ public class Tank extends GameObject {
         } else {
             if(this.currentChargeBullet != null){
                 // add the newly created bullet to the ammo list.
-                this.ammo.add(new Bullet(x,y, Resources.getSprite("bullet"), angle));
                 this.timeSinceLastShot = System.currentTimeMillis();
+                var bullet = new Bullet(x,y, Resources.getSprite("bullet"), angle);
+                this.ammo.add(bullet);
                 this.currentChargeBullet = null;
+                gw.anims.add(new Animation(350, 300, ResourceManager.getAnimation("bulletshoot")));
             }
         }
 
         // update the positions of all bullets in the ammo list.
         this.ammo.forEach((bullet -> bullet.update()));
+
+        centerScreen();
         this.hitbox.setLocation((int)x, (int)y);
         /*System.out.println(this.ammo.size());*/
 

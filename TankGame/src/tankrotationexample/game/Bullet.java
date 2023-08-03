@@ -90,6 +90,11 @@ public class Bullet extends GameObject {
         return this.hitbox.getBounds();
     }
 
+    @Override
+    public void collides(GameObject obj2) {
+
+    }
+
 
     public void setHeading(float x, float y, float angle) {
        this.x = x;

@@ -29,6 +29,7 @@ public class GameWorld extends JPanel implements Runnable {
     private long tick = 0;
     List<GameObject> gameObjects = new ArrayList<>(800);
     private ResourceManager Resources;
+    List<Animation> anims = new ArrayList<>();
 
 
     /**
@@ -44,10 +45,12 @@ public class GameWorld extends JPanel implements Runnable {
     @Override
     public void run() {
         try {
+
             while (true) {
                 this.tick++;
-                this.t1.update(); // update tank1's position and state.
-                this.t2.update(); // update tank2's position and state.
+                this.t1.update(this); // update tank1's position and state.
+                this.t2.update(this); // update tank2's position and state.
+                this.anims.forEach(animation -> animation.update());
                 this.checkCollision();
                 this.repaint();   // redraw game
                 /*
@@ -111,7 +114,21 @@ public class GameWorld extends JPanel implements Runnable {
          *  Load all resources for Tank Wars Game. Set all Game Objects to their
          *  initial state as well.
          */
-        InputStreamReader isr = new InputStreamReader(Objects.requireNonNull(ResourceManager.class.getClassLoader().getResourceAsStream("maps/map1.csv")));
+        InputStreamReader isr = new InputStreamReader(
+                Objects.requireNonNull(
+                        ResourceManager
+                                .class
+                                .getClassLoader()
+                                .getResourceAsStream("maps/map1.csv"))
+        );
+        /*this.anims.add(new Animation(300, 300, ResourceManager.getAnimation("bullethit")));
+        this.anims.add(new Animation(350, 300, ResourceManager.getAnimation("bulletshoot")));
+        this.anims.add(new Animation(400, 300, ResourceManager.getAnimation("powerpick")));
+        this.anims.add(new Animation(450, 300, ResourceManager.getAnimation("puffsmoke")));
+        this.anims.add(new Animation(500, 300, ResourceManager.getAnimation("rocketflame")));
+        this.anims.add(new Animation(550, 300, ResourceManager.getAnimation("rockethit")));*/
+
+
         // create the game world buffer
         try(BufferedReader mapReader = new BufferedReader(isr)){
             int row = 0;
@@ -217,6 +234,8 @@ public class GameWorld extends JPanel implements Runnable {
         this.t1.drawImage(buffer);
         this.t2.drawImage(buffer);
 
+        this.anims.forEach(animation -> animation.drawImage(buffer));
+
         // render split screens for tank1 and tank2 on the main graphics
         renderSplitScreens(g2, world);
 
@@ -226,4 +245,5 @@ public class GameWorld extends JPanel implements Runnable {
 
 
     }
+
 }
