@@ -177,11 +177,19 @@ public class GameWorld extends JPanel implements Runnable {
         this.gameObjects.add(t2);
     }
 
-    // * to draw the floor tiles on the game buffer
+    /**
+     * Draw the floor tiles on the game buffer.
+     *
+     * @param buffer The Graphics2D buffer on which to draw the floor.
+     */
     private void drawFloor(Graphics2D buffer){
+        // get the floor tile image from the resource manager
         BufferedImage floor = Resources.getSprite("floor");
-        for(int i = 0; i< GameConstants.GAME_SCREEN_WIDTH; i+=320){
-            for (int j = 0; j < GameConstants.GAME_SCREEN_HEIGHT; j+=240){
+
+        // loop to draw the floor tiles on the game buffer
+        for(int i = 0; i< GameConstants.GAME_WORLD_WIDTH; i+=320){
+            for (int j = 0; j < GameConstants.GAME_WORLD_HEIGHT; j+=240){
+                // draw the floor tile image at the specified position (i, j) on the buffer
                 buffer.drawImage(floor,i,j,null);
             }
         }
