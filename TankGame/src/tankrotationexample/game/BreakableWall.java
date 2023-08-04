@@ -25,8 +25,10 @@ public class BreakableWall extends GameObject {
 
     }
 
-    public void drawImage(Graphics2D buffer) {
+    public void drawImage(Graphics buffer) {
         buffer.drawImage(this.img, (int)x, (int)y, null);
+
+        // System.out.println("BreakableWall drawImage called at x: " + x + ", y: " + y);
     }
 
 
