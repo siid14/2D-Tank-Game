@@ -188,13 +188,13 @@ public class GameWorld extends JPanel implements Runnable {
         }
 
         // create and initialize tank1
-        t1 = new Tank(300, 300, 0, 0, (short) 0, ResourceManager.getSprite("tank1"), lf);
+        t1 = new Tank(300, 300, 0, 0, (short) 0, ResourceManager.getSprite("tank1"), lf, "T. Red");
         TankControl tc1 = new TankControl(t1, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
         this.lf.getJf().addKeyListener(tc1);
 
         // create and initialize tank2
-        t2 = new Tank(200, 800, 0, 0, (short) 180, ResourceManager.getSprite("tank2"), lf);
-        TankControl tc2 = new TankControl(t2, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_NUMPAD0);
+        t2 = new Tank(200, 800, 0, 0, (short) 0, ResourceManager.getSprite("tank2"), lf, "T. Blue");
+        TankControl tc2 = new TankControl(t2, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_V);
         this.lf.getJf().addKeyListener(tc2);
 
         this.gameObjects.add(t1);

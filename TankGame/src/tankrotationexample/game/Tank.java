@@ -5,11 +5,13 @@ import tankrotationexample.Launcher;
 import tankrotationexample.Resources.ResourceManager;
 import tankrotationexample.Resources.ResourcePool;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  *
@@ -20,6 +22,7 @@ import java.util.List;
  * Represents a tank object in the game.
  */
 public class Tank extends GameObject {
+
 
     // tank properties
     private float x;
@@ -47,6 +50,8 @@ public class Tank extends GameObject {
     private float previousX;
     private float previousY;
     private Launcher launcher;
+    /*private String playerName;*/
+    private static String playerName;
 
     /*static {
         bPool = new ResourcePool<>("bullet", 300);
@@ -54,7 +59,7 @@ public class Tank extends GameObject {
     }*/
 
     // constructor for creating a Tank object
-    Tank(float x, float y, float vx, float vy, float angle, BufferedImage img, Launcher launcher) {
+    Tank(float x, float y, float vx, float vy, float angle, BufferedImage img, Launcher launcher, String playerName) {
         this.x = x;
         this.y = y;
         this.vx = vx;
@@ -64,6 +69,11 @@ public class Tank extends GameObject {
         this.hitbox = new Rectangle((int)x,(int)y,this.img.getWidth(),this.img.getHeight());
         this.life = 4;
         this.launcher = launcher;
+        this.playerName = playerName;
+    }
+
+    public static String getWinnerName() {
+        return playerName;
     }
 
     // getter for the tank's hitbox
@@ -317,7 +327,7 @@ public class Tank extends GameObject {
         }
 
     }
-    
+
     public void collides(GameObject obj){
         if(obj instanceof Bullet){
             //lose life
@@ -336,9 +346,15 @@ public class Tank extends GameObject {
     }
 
     private void handleTankDeath() {
-        // Assuming you have an instance of Launcher or GameWorld in the Tank class ->> complete cha gpt
-        this.launcher.showEndScreen(); // show the end screen
+        this.launcher.setFrame("winner"); // show the end screen
 
+        Timer timer = new Timer(5000, e -> {
+            this.launcher.setFrame("end"); // Switch back to the main game frame after 5 seconds
+        });
+
+        // Start the timer
+        timer.setRepeats(false); // Set to false to run only once
+        timer.start();
     }
 
     @Override

@@ -13,6 +13,7 @@ public class EndGamePanel extends JPanel {
 
     private BufferedImage menuBackground;
     private final Launcher lf;
+    private String winner;
 
     public EndGamePanel(Launcher lf) {
         this.lf = lf;

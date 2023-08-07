@@ -2,8 +2,11 @@ package tankrotationexample;
 
 import tankrotationexample.Resources.ResourceManager;
 import tankrotationexample.game.GameWorld;
+import tankrotationexample.game.Tank;
 import tankrotationexample.menus.EndGamePanel;
 import tankrotationexample.menus.StartMenuPanel;
+import tankrotationexample.menus.WinnerGamePanel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
@@ -35,6 +38,7 @@ public class Launcher {
      * used for our game. It will be attached to the main panel.
      */
     private CardLayout cl;
+    private JPanel winnerGamePanel; // New winner game panel
 
     public Launcher(){
         this.jf = new JFrame();             // creating a new JFrame object
@@ -57,11 +61,13 @@ public class Launcher {
          * two buttons restart and exit.
          */
         JPanel endPanel = new EndGamePanel(this); // create a new end game pane;
+        JPanel winnerPanel = new WinnerGamePanel(this, Tank.getWinnerName()); // Create a new winner game panel
         cl = new CardLayout(); // creating a new CardLayout Panel
         this.mainPanel.setLayout(cl); // set the layout of the main panel to our card layout
         this.mainPanel.add(startPanel, "start"); //add the start panel to the main panel
         this.mainPanel.add(gamePanel, "game");   //add the game panel to the main panel
         this.mainPanel.add(endPanel, "end");    // add the end game panel to the main panel
+        this.mainPanel.add(winnerPanel, "winner"); // Add the winner game panel to the main panel
         this.jf.add(mainPanel); // add the main panel to the JFrame
         this.jf.setResizable(false); //make the JFrame not resizable
         this.setFrame("start"); // set the current panel to start panel
@@ -83,10 +89,12 @@ public class Launcher {
             case "end" ->
                 // set the size of the jFrame to the expected size for the end panel
                     this.jf.setSize(GameConstants.END_MENU_SCREEN_WIDTH, GameConstants.END_MENU_SCREEN_HEIGHT);
+            case "winner" -> this.jf.setSize(GameConstants.END_MENU_SCREEN_WIDTH, GameConstants.END_MENU_SCREEN_HEIGHT);
         }
         this.cl.show(mainPanel, type); // change current panel shown on main panel tp the panel denoted by type.
         this.jf.setVisible(true); // show the JFrame
     }
+
 
     public JFrame getJf() {
         return jf;
@@ -101,13 +109,5 @@ public class Launcher {
         (new Launcher()).initUIComponents();
     }
 
-    public void showEndScreen() {
-        JFrame endScreenFrame = new JFrame("Game Over");
-        JPanel endScreenPanel = new JPanel();
 
-        endScreenFrame.add(endScreenPanel);
-        endScreenFrame.setSize(400, 300); // Set the size of the end screen
-        endScreenFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Handle closing
-        endScreenFrame.setVisible(true);
-    }
 }
