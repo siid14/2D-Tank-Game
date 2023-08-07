@@ -100,4 +100,14 @@ public class Launcher {
         ResourceManager.loadResources();
         (new Launcher()).initUIComponents();
     }
+
+    public void showEndScreen() {
+        JFrame endScreenFrame = new JFrame("Game Over");
+        JPanel endScreenPanel = new JPanel();
+
+        endScreenFrame.add(endScreenPanel);
+        endScreenFrame.setSize(400, 300); // Set the size of the end screen
+        endScreenFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Handle closing
+        endScreenFrame.setVisible(true);
+    }
 }

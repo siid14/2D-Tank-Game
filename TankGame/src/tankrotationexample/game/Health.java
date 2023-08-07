@@ -26,10 +26,14 @@ public class Health extends GameObject {
 
     }
 
+    @Override
+    public boolean hasCollided() {
+        return false;
+    }
+
     public void drawImage(Graphics buffer) {
         if(!this.hasCollided) {
             buffer.drawImage(this.img, (int)x, (int)y, null);
         }
-
     }
 }

@@ -57,7 +57,7 @@ public class GameWorld extends JPanel implements Runnable {
                 this.t2.update(this); // update tank2's position and state.
                 this.anims.forEach(animation -> animation.update());
                 this.checkCollision();
-                /*this.gameObjects.removeIf(gameObject -> gameObject.hasCollided());*/
+                this.gameObjects.removeIf(gameObject -> gameObject.hasCollided());
                 this.repaint();   // redraw game
                 /*
                  * Sleep for 1000/144 ms (~6.9ms). This is done to have our
@@ -70,26 +70,51 @@ public class GameWorld extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Checks for collisions between game objects in the game world.
+     * If a collision is detected, it calls the 'collides' method of the first object
+     * and passes the second object as an argument.
+     */
     private void checkCollision() {
+        // iterate through each game object in the gameObjects list
         for(int i = 0; i < this.gameObjects.size(); i++){
             GameObject obj1 = this.gameObjects.get(i);
+
+            // skip unmovable object types from collision detection
             if(obj1 instanceof Wall || obj1 instanceof Health || obj1 instanceof Speed || obj1 instanceof Shield){
                 continue;
             }
+
+            // check for collisions with other game objects in the gameObjects list
             for(int j = 0; j < this.gameObjects.size(); j++){
                 if(i==j) continue;
                 GameObject obj2 = this.gameObjects.get(j);
+
+                // skip collisions with 'Tank' objects since they are handled separately
                 if(obj2 instanceof Tank){
                     continue;
                 }
+
+                // if a collision is detected between the hit-box of obj1 and obj2
                 if(obj1.getHitBox().intersects(obj2.getHitBox())){
+
                     obj1.collides(obj2);
-                    System.out.println("Collision detected: " +obj1 + " has hit " + obj2);
+
+                    // System.out.println("Collision detected: " +obj1 + " has hit " + obj2);
                     if(obj1 instanceof Tank && obj2 instanceof Health){
                         System.out.println("Tank has hit health");
-                        ResourceManager.getSound("pickup").playSound();
+                        /*ResourceManager.getSound("pickup").playSound();*/
                     }
 
+                    if(obj1 instanceof Tank && obj2 instanceof Bullet){
+                        System.out.println("Tank has been hit by bullet");
+                        /*ResourceManager.getSound("pickup").playSound();*/
+                    }
+
+                    if(obj1 instanceof Bullet && obj2 instanceof Tank){
+                        System.out.println("Tank has been hit by bullet 2");
+                        /*ResourceManager.getSound("pickup").playSound();*/
+                    }
                 }
             }
         }
@@ -163,12 +188,12 @@ public class GameWorld extends JPanel implements Runnable {
         }
 
         // create and initialize tank1
-        t1 = new Tank(300, 300, 0, 0, (short) 0, ResourceManager.getSprite("tank1"));
+        t1 = new Tank(300, 300, 0, 0, (short) 0, ResourceManager.getSprite("tank1"), lf);
         TankControl tc1 = new TankControl(t1, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
         this.lf.getJf().addKeyListener(tc1);
 
         // create and initialize tank2
-        t2 = new Tank(200, 800, 0, 0, (short) 180, ResourceManager.getSprite("tank2"));
+        t2 = new Tank(200, 800, 0, 0, (short) 180, ResourceManager.getSprite("tank2"), lf);
         TankControl tc2 = new TankControl(t2, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_NUMPAD0);
         this.lf.getJf().addKeyListener(tc2);
 
@@ -242,6 +267,12 @@ public class GameWorld extends JPanel implements Runnable {
         g2.drawImage(rh, GameConstants.GAME_SCREEN_WIDTH/2+4, 0, null);
     }
 
+    public void addGameObject(Bullet bullet) {
+        this.gameObjects.add(bullet);
+    }
+
+
+
     // * paint the game components on the screen
     @Override
     public void paintComponent(Graphics g) {
@@ -268,9 +299,5 @@ public class GameWorld extends JPanel implements Runnable {
 
         // render the minimap on the main graphics
         renderMiniMap(g2, world);
-
-
-
     }
-
 }

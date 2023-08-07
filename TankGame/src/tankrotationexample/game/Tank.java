@@ -1,6 +1,7 @@
 package tankrotationexample.game;
 
 import tankrotationexample.GameConstants;
+import tankrotationexample.Launcher;
 import tankrotationexample.Resources.ResourceManager;
 import tankrotationexample.Resources.ResourcePool;
 
@@ -42,6 +43,10 @@ public class Tank extends GameObject {
     private boolean ShootPressed;
     private ResourceManager Resources;
     private Rectangle hitbox;
+    private int life;
+    private float previousX;
+    private float previousY;
+    private Launcher launcher;
 
     /*static {
         bPool = new ResourcePool<>("bullet", 300);
@@ -49,7 +54,7 @@ public class Tank extends GameObject {
     }*/
 
     // constructor for creating a Tank object
-    Tank(float x, float y, float vx, float vy, float angle, BufferedImage img) {
+    Tank(float x, float y, float vx, float vy, float angle, BufferedImage img, Launcher launcher) {
         this.x = x;
         this.y = y;
         this.vx = vx;
@@ -57,6 +62,8 @@ public class Tank extends GameObject {
         this.img = img;
         this.angle = angle;
         this.hitbox = new Rectangle((int)x,(int)y,this.img.getWidth(),this.img.getHeight());
+        this.life = 4;
+        this.launcher = launcher;
     }
 
     // getter for the tank's hitbox
@@ -130,6 +137,11 @@ public class Tank extends GameObject {
 
     // method to update tank's position and handle shooting
     void update(GameWorld gw) {
+
+        // store the current position as the previous position
+        this.previousX = this.x;
+        this.previousY = this.y;
+
         // update tank's position based on the key presses
         if (this.UpPressed) {
             this.moveForwards();
@@ -167,6 +179,7 @@ public class Tank extends GameObject {
                     this.timeSinceLastShot = System.currentTimeMillis();
                     var bullet = new Bullet(x,y, Resources.getSprite("bullet"), angle);
                     this.ammo.add(bullet);
+                    gw.addGameObject(bullet);
                     this.currentChargeBullet = null;
                     /*gw.anims.add(new Animation(350, 300, ResourceManager.getAnimation("bulletshoot")));*/
                     /*ResourceManager.getSound("shotfire").playSound();*/
@@ -296,17 +309,40 @@ public class Tank extends GameObject {
             currentWidth = 100;
         }
         g2d.fillRect((int)x, (int)y-20, (int)currentWidth,15);
+
+        // draw three blue bubbles to represent tank's life
+        g.setColor(Color.BLUE);
+        for (int i = 0; i < life; i++) {
+            g.fillOval((int) x + i * 25, (int) y - 43, 20, 20);
+        }
+
     }
     
-    public void collides(GameObject with){
-        if(with instanceof Bullet){
+    public void collides(GameObject obj){
+        if(obj instanceof Bullet){
             //lose life
-        } else if (with instanceof Wall) {
-            //stop
-        }  else if (with instanceof PowerUp) {
-            ((PowerUp)with).applyPowerUp(this);
+            this.life--;
+            System.out.println("Bullet hit tank so life :" + life + "-1 = " + (life - 1));
+            if(this.life == 0){
+                handleTankDeath();
+            }
+        } else if (obj instanceof Wall || obj instanceof BreakableWall) {
+            // reset tank's position to previous position before collision
+            this.setX(previousX);
+            this.setY(previousY);
+        }  else if (obj instanceof PowerUp) {
+            ((PowerUp)obj).applyPowerUp(this);
+        }
     }
-}
 
+    private void handleTankDeath() {
+        // Assuming you have an instance of Launcher or GameWorld in the Tank class ->> complete cha gpt
+        this.launcher.showEndScreen(); // show the end screen
 
+    }
+
+    @Override
+    public boolean hasCollided() {
+        return false;
+    }
 }

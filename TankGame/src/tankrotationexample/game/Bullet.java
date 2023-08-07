@@ -82,8 +82,12 @@ public class Bullet extends GameObject {
         rotation.rotate(Math.toRadians(angle), this.img.getWidth() / 2.0, this.img.getHeight() / 2.0);
         rotation.scale(this.charge,this.charge); // scale the bullet to make it larger
 
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.drawImage(this.img, rotation, null);
+        Graphics2D buffer = (Graphics2D) g;
+        buffer.drawImage(this.img, rotation, null);
+
+       // draw hit-box representation
+       buffer.setColor(Color.RED); // You can choose any color you prefer
+       buffer.drawRect((int) x, (int) y, this.img.getWidth(), this.img.getHeight());
     }
 
     @Override
@@ -93,7 +97,11 @@ public class Bullet extends GameObject {
 
     @Override
     public void collides(GameObject obj2) {
+    }
 
+    @Override
+    public boolean hasCollided() {
+        return false;
     }
 
     // set the bullet's heading (position and angle)

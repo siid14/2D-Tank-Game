@@ -24,10 +24,23 @@ public class Wall extends GameObject {
 
     }
 
+    @Override
+    public boolean hasCollided() {
+        return false;
+    }
+
     public void drawImage(Graphics buffer) {
         buffer.drawImage(this.img, (int)x, (int)y, null);
 
         // debug print statement to check if the drawImage method is being called
        // System.out.println("Wall drawImage called at x: " + x + ", y: " + y);
+    }
+
+    public float getX() {
+        return this.x;
+    }
+
+    public float getY() {
+        return this.y;
     }
 }

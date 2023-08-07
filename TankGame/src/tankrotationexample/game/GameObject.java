@@ -29,4 +29,5 @@ public abstract class GameObject {
 
     public abstract void collides(GameObject obj2);
 
+    public abstract boolean hasCollided();
 }
