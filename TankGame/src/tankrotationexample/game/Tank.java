@@ -173,7 +173,7 @@ public class Tank extends GameObject {
         // handle shooting
         if(this.ShootPressed && (this.timeSinceLastShot
          + this.cooldown) < System.currentTimeMillis()) {
-
+            ResourceManager.getSound("bullet_shoot").playSound();
             // if the current charge bullet is null
             // create a new charge bullet at the tank's position and set its heading.
             if(this.currentChargeBullet == null){
