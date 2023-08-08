@@ -103,7 +103,7 @@ public class GameWorld extends JPanel implements Runnable {
                     // System.out.println("Collision detected: " +obj1 + " has hit " + obj2);
                     if(obj1 instanceof Tank && obj2 instanceof Health){
                         System.out.println("Tank has hit health");
-                        /*ResourceManager.getSound("pickup").playSound();*/
+                        ResourceManager.getSound("pickup").playSound();
                     }
 
                     if(obj1 instanceof Tank && obj2 instanceof Bullet){

@@ -3,10 +3,11 @@ package tankrotationexample.game;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Shield extends GameObject {
+public class Shield extends GameObject implements PowerUp {
     float x,y;
     BufferedImage img;
     private Rectangle hitbox;
+    boolean hasCollided = false;
     public Shield(float x, float y, BufferedImage img) {
         this.x = x;
         this.y = y;
@@ -30,6 +31,15 @@ public class Shield extends GameObject {
     }
 
     public void drawImage(Graphics buffer) {
-        buffer.drawImage(this.img, (int)x, (int)y, null);
+        if(!this.hasCollided) {
+            buffer.drawImage(this.img, (int)x, (int)y, null);
+        }
+    }
+
+    @Override
+    public void applyPowerUp(Tank tank) {
+        tank.hasShield();
+        hasCollided = true; // mark the power-up as collected
+        System.out.println("Shield Power-Up applied");
     }
 }

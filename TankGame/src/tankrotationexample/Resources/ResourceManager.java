@@ -146,6 +146,7 @@ public class ResourceManager {
             ResourceManager.sounds.put("bullet_shoot", loadSound("sounds/bullet_shoot.wav"));
             ResourceManager.sounds.put("explosion", loadSound("sounds/explosion.wav"));
             ResourceManager.sounds.put("background", loadSound("sounds/Music.mid"));
+            /*ResourceManager.sounds.put("background", loadSound("sounds/Pokeball.mid"));*/
             ResourceManager.sounds.put("pickup", loadSound("sounds/pickup.wav"));
             ResourceManager.sounds.put("shotfire", loadSound("sounds/shotfiring.wav"));
         } catch(Exception e){

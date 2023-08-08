@@ -3,11 +3,12 @@ package tankrotationexample.game;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Health extends GameObject {
+public class Health extends GameObject implements PowerUp {
     float x,y;
     BufferedImage img;
     private Rectangle hitbox;
     boolean hasCollided = false;
+    private int life = 1;
 
     public Health(float x, float y, BufferedImage img) {
         this.x = x;
@@ -22,8 +23,10 @@ public class Health extends GameObject {
     }
 
     @Override
-    public void collides(GameObject obj2) {
-
+    public void collides(GameObject obj) {
+        if (!hasCollided && obj instanceof Tank) {
+            applyPowerUp((Tank) obj);
+        }
     }
 
     @Override
@@ -35,5 +38,12 @@ public class Health extends GameObject {
         if(!this.hasCollided) {
             buffer.drawImage(this.img, (int)x, (int)y, null);
         }
+    }
+
+    @Override
+    public void applyPowerUp(Tank tank) {
+        tank.increaseLife(100); // increase tank's life by 100
+        hasCollided = true; // mark the power-up as collected
+        System.out.println("Health Power-Up applied");
     }
 }

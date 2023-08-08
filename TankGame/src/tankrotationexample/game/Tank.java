@@ -52,6 +52,7 @@ public class Tank extends GameObject {
     private Launcher launcher;
     /*private String playerName;*/
     private static String playerName;
+    boolean hasShield;
 
     /*static {
         bPool = new ResourcePool<>("bullet", 300);
@@ -67,7 +68,7 @@ public class Tank extends GameObject {
         this.img = img;
         this.angle = angle;
         this.hitbox = new Rectangle((int)x,(int)y,this.img.getWidth(),this.img.getHeight());
-        this.life = 4;
+        this.life = 100;
         this.launcher = launcher;
         this.playerName = playerName;
     }
@@ -322,7 +323,7 @@ public class Tank extends GameObject {
 
         // draw three blue bubbles to represent tank's life
         g.setColor(Color.BLUE);
-        for (int i = 0; i < life; i++) {
+        for (int i = 0; i < 4; i++) {
             g.fillOval((int) x + i * 25, (int) y - 43, 20, 20);
         }
 
@@ -332,7 +333,7 @@ public class Tank extends GameObject {
         if(obj instanceof Bullet){
             //lose life
             this.life--;
-            System.out.println("Bullet hit tank so life :" + life + "-1 = " + (life - 1));
+            System.out.println("Bullet hit tank " + playerName + " so life :" + life + "-1 = " + (life - 1));
             if(this.life == 0){
                 handleTankDeath();
             }
@@ -352,13 +353,50 @@ public class Tank extends GameObject {
             this.launcher.setFrame("end"); // Switch back to the main game frame after 5 seconds
         });
 
-        // Start the timer
-        timer.setRepeats(false); // Set to false to run only once
+        // start the timer
+        timer.setRepeats(false); // set to false to run only once
         timer.start();
     }
 
     @Override
     public boolean hasCollided() {
         return false;
+    }
+
+
+    public void increaseLife(int i) {
+        System.out.println("Life of " + playerName + " before life increased : " + this.life);
+        this.life = life + i;
+        System.out.println("Life of " + playerName + " after increased life : " + this.life);
+    }
+
+    public void increaseSpeed(float v) {
+        R += v;
+    }
+
+    public void hasShield() {
+        int previousLife = this.life;
+        /*System.out.println("Tank " + playerName + " previousLife: " + previousLife);*/
+
+        // set the tank's life to the bonus life value
+        this.life = 10000; // or any other value you want as the bonus life
+        /*System.out.println("Tank " + playerName + " Life (time applying): " + this.life);*/
+
+        // create a Timer to switch back to the previous life after the bonus duration
+        Timer timer = new Timer(10000, e -> {
+            this.life = previousLife; // Switch back to the previous life value
+            /*System.out.println("Tank " + playerName + " lastLife: " + this.life + " (Timer expired)");*/
+        });
+
+        // start the timer
+        timer.setRepeats(false); // Set to false to run only once
+        timer.start();
+
+        /*System.out.println("Tank " + playerName + " Timer started");*/
+
+        // this line won't execute immediately due to the timer delay
+        this.life = previousLife;
+        /*System.out.println("Tank " + playerName + " life reverted to previous value: " + this.life);*/
+
     }
 }

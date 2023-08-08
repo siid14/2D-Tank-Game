@@ -15,7 +15,7 @@ public class BreakableWall extends GameObject {
         this.y = y;
         this.img = img;
         this.hitbox = new Rectangle((int)x,(int)y,this.img.getWidth(),this.img.getHeight());
-        this.life = 100;
+        this.life = 50;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class BreakableWall extends GameObject {
         if(obj instanceof Bullet){
             //lose life
             this.life--;
-            System.out.println("Bullet hit breakable wall so life : " + life + "-1 = " + (life - 1));
+            /*System.out.println("Bullet hit breakable wall so life : " + life + "-1 = " + (life - 1));*/
         }
     }
 
@@ -43,7 +43,6 @@ public class BreakableWall extends GameObject {
 
     public void drawImage(Graphics buffer) {
         buffer.drawImage(this.img, (int)x, (int)y, null);
-
         // System.out.println("BreakableWall drawImage called at x: " + x + ", y: " + y);
     }
 
