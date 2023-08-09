@@ -169,6 +169,8 @@ public class Tank extends GameObject {
         if (this.RightPressed) {
             this.rotateRight();
         }
+        int startX = (int) ((this.x + 13) + (37 * (int) Math.round(Math.cos(Math.toRadians(angle)))));
+        int startY = (int) ((this.y + 9) + (37 * (int) Math.round(Math.sin(Math.toRadians(angle)))));
 
         // handle shooting
         if(this.ShootPressed && (this.timeSinceLastShot
@@ -192,7 +194,7 @@ public class Tank extends GameObject {
                     this.ammo.add(bullet);
                     gw.addGameObject(bullet);
                     this.currentChargeBullet = null;
-                    /*gw.anims.add(new Animation(350, 300, ResourceManager.getAnimation("bulletshoot")));*/
+                    gw.anims.add(new Animation(startX , startY , ResourceManager.getAnimation("bulletshoot")));
                     /*ResourceManager.getSound("shotfire").playSound();*/
                 }
             }

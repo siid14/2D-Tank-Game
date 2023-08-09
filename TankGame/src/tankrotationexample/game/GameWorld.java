@@ -106,6 +106,16 @@ public class GameWorld extends JPanel implements Runnable {
                         ResourceManager.getSound("pickup").playSound();
                     }
 
+                    if(obj1 instanceof Tank && obj2 instanceof Shield){
+                        System.out.println("Tank has hit health");
+                        ResourceManager.getSound("pickup").playSound();
+                    }
+
+                    if(obj1 instanceof Tank && obj2 instanceof Speed){
+                        System.out.println("Tank has hit health");
+                        ResourceManager.getSound("pickup").playSound();
+                    }
+
                     if(obj1 instanceof Tank && obj2 instanceof Bullet){
                         System.out.println("Tank has been hit by bullet");
                         ResourceManager.getSound("explosion").playSound();

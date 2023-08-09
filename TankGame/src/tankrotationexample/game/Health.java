@@ -1,5 +1,7 @@
 package tankrotationexample.game;
 
+import tankrotationexample.Resources.ResourceManager;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -9,6 +11,7 @@ public class Health extends GameObject implements PowerUp {
     private Rectangle hitbox;
     boolean hasCollided = false;
     private int life = 1;
+    GameWorld gw;
 
     public Health(float x, float y, BufferedImage img) {
         this.x = x;
@@ -26,7 +29,10 @@ public class Health extends GameObject implements PowerUp {
     public void collides(GameObject obj) {
         if (!hasCollided && obj instanceof Tank) {
             applyPowerUp((Tank) obj);
+            // ! don't work
+            gw.anims.add(new Animation(x , y, ResourceManager.getAnimation("bulletshoot")));
         }
+
     }
 
     @Override
