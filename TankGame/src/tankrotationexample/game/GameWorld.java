@@ -48,8 +48,8 @@ public class GameWorld extends JPanel implements Runnable {
         try {
 
             // play background music when the game run
-            /*background.setLooping();
-            background.playSound();*/
+            background.setLooping();
+            background.playSound();
 
             while (true) {
                 this.tick++;

@@ -68,7 +68,7 @@ public class Tank extends GameObject {
         this.img = img;
         this.angle = angle;
         this.hitbox = new Rectangle((int)x,(int)y,this.img.getWidth(),this.img.getHeight());
-        this.life = 100;
+        this.life = 500;
         this.launcher = launcher;
         this.playerName = playerName;
     }
