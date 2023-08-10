@@ -38,7 +38,9 @@ The jar folder is to be used to store the built jar of your term-project.
 -	Choose the appropriate JDK version for the project.
 
 ## Steps to Build your Project:
- 
+
+java -jar csc413-tankgame-siid14.jar
+
 ## Steps to run your Project:
 
 Open IDE:
