@@ -72,10 +72,6 @@ public class Bullet extends GameObject {
         this.charge = this.charge + 0.05f;
     }
 
-    /*public void drawImage(Graphics buffer) {
-        buffer.drawImage(this.img, (int)x, (int)y, null);
-    }*/
-
     // draw the bullet on the screen
    public void drawImage(Graphics g) {
         AffineTransform rotation = AffineTransform.getTranslateInstance(x, y);

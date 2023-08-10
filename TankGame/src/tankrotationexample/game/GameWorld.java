@@ -270,8 +270,6 @@ public class GameWorld extends JPanel implements Runnable {
                 GameConstants.GAME_SCREEN_WIDTH/2,
                 GameConstants.GAME_SCREEN_HEIGHT);
 
-        /*g2.drawImage(world, 0, 0, null); // draw the buffer onto the main graphics*/
-
         // draw the left and right split screens onto the main graphics
         g2.drawImage(lh, 0, 0, null);
         g2.drawImage(rh, GameConstants.GAME_SCREEN_WIDTH/2+4, 0, null);
@@ -288,9 +286,6 @@ public class GameWorld extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         Graphics2D buffer = world.createGraphics();
-
-       /* buffer.setColor(Color.BLACK);
-        buffer.fillRect(0,0, GameConstants.GAME_SCREEN_WIDTH, GameConstants.GAME_SCREEN_HEIGHT);*/
 
         // draw the floor tiles on the game buffer
         this.drawFloor(buffer);

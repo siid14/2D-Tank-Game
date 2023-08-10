@@ -10,6 +10,7 @@ public class BreakableWall extends GameObject {
     private int life;
     private GameWorld gw;
 
+    // constructor for creating a BreakableWall object
     public BreakableWall(float x, float y, BufferedImage img) {
         this.x = x;
         this.y = y;
@@ -18,32 +19,33 @@ public class BreakableWall extends GameObject {
         this.life = 50;
     }
 
+    // get the hitbox of the BreakableWall
     @Override
     public Rectangle getHitBox() {
         return this.hitbox.getBounds();
     }
 
+    // handle collision with other game objects
     @Override
     public void collides(GameObject obj) {
         if(obj instanceof Bullet){
-            //lose life
+            // decrease the life of the wall upon collision with a bullet
             this.life--;
-            /*System.out.println("Bullet hit breakable wall so life : " + life + "-1 = " + (life - 1));*/
         }
     }
 
+    // check if the wall has been destroyed
     @Override
     public boolean hasCollided() {
         if(this.life <= 0){
-            return true;
+            return true; // wall has collided if its life is zero or negative
         }
-        return false;
+        return false; // wall hasn't collided yet
     }
 
-
+    // draw the BreakableWall on the screen
     public void drawImage(Graphics buffer) {
         buffer.drawImage(this.img, (int)x, (int)y, null);
-        // System.out.println("BreakableWall drawImage called at x: " + x + ", y: " + y);
     }
 
 

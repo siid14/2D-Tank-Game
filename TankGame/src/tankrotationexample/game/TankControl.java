@@ -7,6 +7,12 @@ import java.awt.event.KeyListener;
  *
  * @author anthony-pc
  */
+
+/**
+ * TankControl class handles keyboard input for controlling a tank.
+ */
+
+
 public class TankControl implements KeyListener {
     private final Tank t1;
     private final int up;
@@ -14,7 +20,8 @@ public class TankControl implements KeyListener {
     private final int right;
     private final int left;
     private final int shoot;
-    
+
+    // constructor for creating a TankControl instance
     public TankControl(Tank t1, int up, int down, int left, int right, int shoot) {
         this.t1 = t1;
         this.up = up;
@@ -29,9 +36,11 @@ public class TankControl implements KeyListener {
 
     }
 
+    // handle key press events
     @Override
     public void keyPressed(KeyEvent ke) {
         int keyPressed = ke.getKeyCode();
+        // toggle movement flags based on the pressed key
         if (keyPressed == up) {
             this.t1.toggleUpPressed();
         }
@@ -49,9 +58,12 @@ public class TankControl implements KeyListener {
         }
     }
 
+
+    // handle key release events
     @Override
     public void keyReleased(KeyEvent ke) {
         int keyReleased = ke.getKeyCode();
+        // untoggle movement flags based on the released key
         if (keyReleased  == up) {
             this.t1.unToggleUpPressed();
         }

@@ -195,7 +195,6 @@ public class Tank extends GameObject {
                     gw.addGameObject(bullet);
                     this.currentChargeBullet = null;
                     gw.anims.add(new Animation(startX , startY , ResourceManager.getAnimation("bulletshoot")));
-                    /*ResourceManager.getSound("shotfire").playSound();*/
                 }
             }
 
@@ -207,11 +206,7 @@ public class Tank extends GameObject {
 
         // update the hitbox position based on the tank's position
         this.hitbox.setLocation((int)x, (int)y);
-         /*System.out.println(this.ammo.size());*/
 
-        /*if(b != null){
-            this.b.update();
-        }*/
 
     }
 
@@ -299,7 +294,7 @@ public class Tank extends GameObject {
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(this.img, rotation, null);
         g2d.setColor(Color.RED);
-        //g2d.rotate(Math.toRadians(angle), bounds.x + bounds.width/2, bounds.y + bounds.height/2);
+
         g2d.drawRect((int)x,(int)y,this.img.getWidth(), this.img.getHeight());
 
         // draw all the bullets in the ammo list on the screen
@@ -309,10 +304,6 @@ public class Tank extends GameObject {
         if(this.currentChargeBullet != null){
             this.currentChargeBullet.drawImage(g2d);
         }
-
-        /*if(b != null){
-            this.b.drawImage(g2d);
-        }*/
 
         g2d.setColor(Color.GREEN);
         g2d.drawRect((int)x, (int)y-20, 100,15);
@@ -378,27 +369,20 @@ public class Tank extends GameObject {
 
     public void hasShield() {
         int previousLife = this.life;
-        /*System.out.println("Tank " + playerName + " previousLife: " + previousLife);*/
 
         // set the tank's life to the bonus life value
         this.life = 10000; // or any other value you want as the bonus life
-        /*System.out.println("Tank " + playerName + " Life (time applying): " + this.life);*/
 
         // create a Timer to switch back to the previous life after the bonus duration
         Timer timer = new Timer(10000, e -> {
             this.life = previousLife; // Switch back to the previous life value
-            /*System.out.println("Tank " + playerName + " lastLife: " + this.life + " (Timer expired)");*/
         });
 
         // start the timer
         timer.setRepeats(false); // Set to false to run only once
         timer.start();
 
-        /*System.out.println("Tank " + playerName + " Timer started");*/
-
         // this line won't execute immediately due to the timer delay
         this.life = previousLife;
-        /*System.out.println("Tank " + playerName + " life reverted to previous value: " + this.life);*/
-
     }
 }
