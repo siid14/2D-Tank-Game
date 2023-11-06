@@ -9,7 +9,7 @@ resources folder is to be used to store the resources for your project only. Thi
 `The src and resources folders can be deleted if you want a different file structure`
 
 ## jar Folder Purpose 
-The jar folder is to be used to store the built jar of your term-project.
+The jar folder is to be used to store the built jar of this project
 
 `NO SOURCE CODE SHOULD BE IN THIS FOLDER. DOING SO WILL CAUSE POINTS TO BE DEDUCTED`
 
