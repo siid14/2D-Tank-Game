@@ -1,4 +1,4 @@
-# csc413-tankgame
+## 2D-Tank-Game
 
 
 | Student Information |                |
