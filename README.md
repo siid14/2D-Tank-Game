@@ -1,11 +1,5 @@
 ## 2D-Tank-Game
 
-
-| Student Information |                |
-|:-------------------:|----------------|
-|  Student Name       |   Sidney Thomas    |
-|  Student Email      |   sthomas10@sfsu.edu   |
-
 ## src Folder Purpose 
 src folder is to be used to store source code only.
 
